@@ -1251,6 +1251,11 @@
 			var dialog = event.dialog;
 
 			iframeBody.addClass('dialog-iframe-popup');
+
+			if (iframeBody.one('.lfr-form-content') && iframeBody.one('.button-holder.dialog-footer')) {
+				iframeBody.addClass('dialog-with-footer');
+			}
+
 			iframeBody.addClass(dialog.iframeConfig.bodyCssClass);
 
 			var detachEventHandles = function() {
@@ -1339,12 +1344,22 @@
 
 			ddmURL.setParameter('scopeTitle', config.title);
 
+			if ('searchRestriction' in config) {
+				ddmURL.setParameter('searchRestriction', config.searchRestriction);
+				ddmURL.setParameter('searchRestrictionClassNameId', config.searchRestrictionClassNameId);
+				ddmURL.setParameter('searchRestrictionClassPK', config.searchRestrictionClassPK);
+			}
+
 			if ('showAncestorScopes' in config) {
 				ddmURL.setParameter('showAncestorScopes', config.showAncestorScopes);
 			}
 
 			if ('showBackURL' in config) {
 				ddmURL.setParameter('showBackURL', config.showBackURL);
+			}
+
+			if ('showCacheableInput' in config) {
+				ddmURL.setParameter('showCacheableInput', config.showCacheableInput);
 			}
 
 			if ('showHeader' in config) {

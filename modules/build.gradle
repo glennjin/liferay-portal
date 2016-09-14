@@ -9,7 +9,7 @@ buildscript {
 
 Set<File> bndPrintJarFiles = null
 
-if (System.getenv("JENKINS_HOME")) {
+if (Boolean.getBoolean("build.bnd.print.enabled") && System.getenv("JENKINS_HOME")) {
 	configurations {
 		bnd
 	}
@@ -28,6 +28,24 @@ if (System.getenv("JENKINS_HOME")) {
 }
 
 buildDir = new File(rootDir.parentFile, "build")
+
+for (String gradleVersion in ["2.5", "2.14"]) {
+	String gradleDistributionURL = "https://services.gradle.org/distributions/gradle-${gradleVersion}-bin.zip"
+	String suffix = gradleVersion.replace('.', '')
+
+	tasks.create(name: "extractGradleApi${suffix}", type: Copy) {
+		description = "Extracts the Gradle ${gradleVersion} JAR files into a temporary directory."
+
+		from {
+			zipTree(FileUtil.get(project, gradleDistributionURL))
+		}
+
+		include "gradle-${gradleVersion}/lib/**/*.jar"
+
+		includeEmptyDirs = false
+		into buildDir
+	}
+}
 
 gradle.beforeProject {
 	Project project ->
@@ -121,16 +139,6 @@ gradle.beforeProject {
 
 				startTestableTomcat {
 					deleteLiferayHome = false
-				}
-			}
-		}
-
-		if (System.getenv("JENKINS_HOME")) {
-			pluginManager.withPlugin("com.liferay.node") {
-				downloadNode {
-					doFirst {
-						throw new GradleException("Unable to use Node.js on CI, please configure com.liferay.cache or update the cache")
-					}
 				}
 			}
 		}

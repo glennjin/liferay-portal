@@ -98,6 +98,17 @@ public abstract class Baseline {
 
 			BundleInfo bundleInfo = baseline.getBundleInfo();
 
+			if (hasPackageDelta(infos, Delta.REMOVED)) {
+				bundleInfo.suggestedVersion = new Version(
+					bundleInfo.olderVersion.getMajor() + 1, 0, 0);
+
+				if (bundleInfo.suggestedVersion.compareTo(
+						bundleInfo.newerVersion.getWithoutQualifier()) > 0) {
+
+					bundleInfo.mismatch = true;
+				}
+			}
+
 			if (bundleInfo.mismatch) {
 				match = false;
 
@@ -125,6 +136,16 @@ public abstract class Baseline {
 					match = false;
 				}
 
+				Diff packageDiff = info.packageDiff;
+
+				Delta delta = packageDiff.getDelta();
+
+				if (_forceVersionOneOnAddedPackages && (delta == Delta.ADDED) &&
+					bundleInfo.newerVersion.equals(info.newerVersion)) {
+
+					info.suggestedVersion = Version.ONE;
+				}
+
 				String warnings = "-";
 
 				Version newerVersion = info.newerVersion;
@@ -140,10 +161,6 @@ public abstract class Baseline {
 						warnings = "VERSION INCREASE REQUIRED";
 					}
 				}
-
-				Diff packageDiff = info.packageDiff;
-
-				Delta delta = packageDiff.getDelta();
 
 				if (delta == Delta.REMOVED) {
 					warnings = "PACKAGE REMOVED";
@@ -221,6 +238,12 @@ public abstract class Baseline {
 
 	public void setForcePackageInfo(boolean forcePackageInfo) {
 		_forcePackageInfo = forcePackageInfo;
+	}
+
+	public void setForceVersionOneOnAddedPackages(
+		boolean forceVersionOneOnAddedPackages) {
+
+		_forceVersionOneOnAddedPackages = forceVersionOneOnAddedPackages;
 	}
 
 	public void setLogFile(File logFile) {
@@ -414,6 +437,16 @@ public abstract class Baseline {
 		return String.valueOf(deltaString.charAt(0));
 	}
 
+	protected boolean hasPackageDelta(Iterable<Info> infos, Delta delta) {
+		for (Info info : infos) {
+			if (info.packageDiff.getDelta() == delta) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	protected abstract void log(Reporter reporter);
 
 	protected abstract void log(String output);
@@ -464,6 +497,7 @@ public abstract class Baseline {
 
 	private File _bndFile;
 	private boolean _forcePackageInfo;
+	private boolean _forceVersionOneOnAddedPackages = true;
 	private boolean _headerPrinted;
 	private File _logFile;
 	private File _newJarFile;

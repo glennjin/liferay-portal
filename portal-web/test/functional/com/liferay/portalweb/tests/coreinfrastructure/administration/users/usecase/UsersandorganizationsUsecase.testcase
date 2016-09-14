@@ -327,6 +327,14 @@
 			<var name="siteName" value="${siteName}" />
 		</execute>
 
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
+			<var name="portlet" value="Server Administration" />
+		</execute>
+
+		<execute macro="ServerAdministration#executeServerResourcesActions">
+			<var name="actionsDescription" value="Reindex all search indexes." />
+		</execute>
+
 		<while>
 			<not>
 				<equals arg1="${count}" arg2="6" />
@@ -607,7 +615,7 @@
 		<for list="Message Boards,User Statistics" param="portletTitleName">
 			<var name="key_portletTitleName" value="${portletTitleName}" />
 
-			<execute function="AssertTextEquals" locator1="BasePortlet#SPECIFIC_TITLE" value1="${portletTitleName}" />
+			<execute function="AssertTextEquals" locator1="Portlet#SPECIFIC_TITLE" value1="${portletTitleName}" />
 		</for>
 
 		<execute macro="ProductMenu#gotoControlPanelUsers">

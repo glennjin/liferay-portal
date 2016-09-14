@@ -24,6 +24,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ADD_ANNOUNCEMENT</td>
+	<td>//span[contains(.,'Add Announcement')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>ADD_CATEGORY</td>
 	<td>//span[contains(.,'Add Category')]</td>
 	<td></td>
@@ -139,6 +144,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>AUTOCOMPLETE</td>
+	<td>//button[contains(.,'Autocomplete')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>BACK</td>
 	<td>//a[@title='Back'] | //a[contains(@id,'back')] | //button[contains(.,'Back')]</td>
 	<td></td>
@@ -160,7 +170,7 @@
 </tr>
 <tr>
 	<td>CANCEL</td>
-	<td>//a[contains(@class,'cancel') and contains(@class,'btn')] | //button[contains(.,'Cancel')]</td>
+	<td>//a[contains(@class,'cancel') and contains(@class,'btn')] | //button[contains(.,'Cancel')] | //a[contains(@class,'btn') and contains(.,'Cancel')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -646,6 +656,11 @@
 <tr>
 	<td>SELECT_SCOPE</td>
 	<td>//div[contains(@class,'btn-group')]/a[@title='Default']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SELECT_VOCABULARY</td>
+	<td>//button[contains(@title,'Select Vocabulary')]</td>
 	<td></td>
 </tr>
 <tr>

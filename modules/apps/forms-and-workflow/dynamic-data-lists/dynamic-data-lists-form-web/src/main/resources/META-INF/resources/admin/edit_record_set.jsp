@@ -111,14 +111,30 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 		<aui:fieldset cssClass="ddl-form-basic-info">
 			<div class="container-fluid-1280">
 				<h1>
-					<liferay-ui:input-editor autoCreate="<%= false %>" contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(name, themeDisplay.getLanguageId())) %>" cssClass="ddl-form-name" editorName="alloyeditor" name="nameEditor" placeholder="untitled-form" showSource="<%= false %>" />
+					<liferay-ui:input-editor
+						autoCreate="<%= false %>"
+						contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(name, themeDisplay.getLanguageId())) %>"
+						cssClass="ddl-form-name"
+						editorName="alloyeditor"
+						name="nameEditor"
+						placeholder="untitled-form"
+						showSource="<%= false %>"
+					/>
 				</h1>
 
 				<aui:input name="name" type="hidden" />
 
-				<h2>
-					<liferay-ui:input-editor autoCreate="<%= false %>" contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(description, themeDisplay.getLanguageId())) %>" cssClass="ddl-form-description" editorName="alloyeditor" name="descriptionEditor" placeholder="add-a-short-description-for-this-form" showSource="<%= false %>" />
-				</h2>
+				<h5>
+					<liferay-ui:input-editor
+						autoCreate="<%= false %>"
+						contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(description, themeDisplay.getLanguageId())) %>"
+						cssClass="ddl-form-description h5"
+						editorName="alloyeditor"
+						name="descriptionEditor"
+						placeholder="add-a-short-description-for-this-form"
+						showSource="<%= false %>"
+					/>
+				</h5>
 
 				<aui:input name="description" type="hidden" />
 			</div>
@@ -173,6 +189,8 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 
 		<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="publishRecordSet" var="publishRecordSetURL" />
 
+		<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="getFieldSettingsDDMFormContext" var="getFieldSettingsDDMFormContext" />
+
 		<aui:script>
 			var initHandler = Liferay.after(
 				'form:registered',
@@ -202,11 +220,12 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 									'formPortlet',
 									new Liferay.DDL.Portlet(
 										{
-											dataProviders: <%= ddlFormAdminDisplayContext.getSerializedDDMDataProviders() %>,
 											definition: <%= ddlFormAdminDisplayContext.getSerializedDDMForm() %>,
 											description: '<%= HtmlUtil.escapeJS(description) %>',
 											editForm: event.form,
-											evaluatorURL: '<%= ddlFormAdminDisplayContext.getDDMFormEvaluatorServletURL() %>',
+											evaluatorURL: '<%= ddlFormAdminDisplayContext.getDDMFormContextProviderServletURL() %>',
+											fieldTypesDefinitions: <%= ddlFormAdminDisplayContext.getDDMFormFieldTypesDefinitionsMap() %>,
+											getFieldTypeSettingFormContextURL: '<%= getFieldSettingsDDMFormContext.toString() %>',
 											layout: <%= ddlFormAdminDisplayContext.getSerializedDDMFormLayout() %>,
 											name: '<%= HtmlUtil.escapeJS(name) %>',
 											namespace: '<portlet:namespace />',

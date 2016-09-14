@@ -16,7 +16,7 @@ package com.liferay.comment.web.internal.asset;
 
 import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.asset.kernel.model.BaseJSPAssetRenderer;
-import com.liferay.comment.web.internal.constants.CommentPortletKeys;
+import com.liferay.comment.web.constants.CommentPortletKeys;
 import com.liferay.portal.kernel.comment.Comment;
 import com.liferay.portal.kernel.comment.CommentManagerUtil;
 import com.liferay.portal.kernel.comment.DiscussionPermission;
@@ -82,7 +82,7 @@ public class CommentAssetRenderer
 	}
 
 	/**
-	 * @deprecated As of 7.0.0, with no direct replacement
+	 * @deprecated As of 1.1.0, with no direct replacement
 	 */
 	@Deprecated
 	@Override

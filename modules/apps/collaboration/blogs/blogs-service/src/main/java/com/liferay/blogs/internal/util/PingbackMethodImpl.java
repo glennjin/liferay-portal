@@ -15,7 +15,7 @@
 package com.liferay.blogs.internal.util;
 
 import com.liferay.blogs.kernel.model.BlogsEntry;
-import com.liferay.blogs.kernel.service.BlogsEntryLocalService;
+import com.liferay.blogs.service.BlogsEntryLocalService;
 import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.comment.DuplicateCommentException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -235,6 +235,7 @@ public class PingbackMethodImpl implements Method {
 		}
 
 		long plid = PortalUtil.getPlidFromFriendlyURL(companyId, friendlyURL);
+
 		long groupId = PortalUtil.getScopeGroupId(plid);
 
 		Map<String, String[]> params = new HashMap<>();

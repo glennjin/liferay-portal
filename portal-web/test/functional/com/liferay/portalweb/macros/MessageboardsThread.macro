@@ -57,6 +57,8 @@
 	<command name="addPG">
 		<execute function="AssertClick" locator1="Button#POST_NEW_THREAD" value1="Post New Thread" />
 
+		<execute function="AssertElementPresent" locator1="TextInput#SUBJECT" />
+
 		<execute function="Type" locator1="TextInput#SUBJECT" value1="${threadSubject}" />
 
 		<if>
@@ -137,7 +139,13 @@
 
 		<execute function="UploadCommonFile" locator1="MessageBoardsEditMessage#ATTACHMENTS_FILE_FIELD_1" value1="${mbThreadAttachment}" />
 
-		<execute macro="PortletEntry#publish" />
+		<execute macro="Button#clickPublish" />
+
+		<var name="key_threadSubject" value="${threadSubject}" />
+
+		<execute function="AssertElementPresent" locator1="MessageBoardsThread#THREAD_REPLY_BUTTON" />
+
+		<execute macro="Alert#viewSuccessMessage" />
 	</command>
 
 	<command name="addPGWithPermissions">
@@ -271,6 +279,12 @@
 		<execute function="Click" locator1="MenuItem#MOVE_TO_THE_RECYCLE_BIN" />
 		<execute function="AssertElementPresent" locator1="Message#SUCCESS" />
 		<execute function="AssertElementNotPresent" locator1="MessageBoards#THREAD_LIST_THREAD" />
+	</command>
+
+	<command name="downloadAttachmentPG">
+		<execute function="Click" locator1="MessageBoardsThread#MESSAGE_BODY_ATTACHMENT_1" />
+
+		<execute function="DownloadTempFile" />
 	</command>
 
 	<command name="editCP">
@@ -727,6 +741,8 @@
 
 		<execute function="AssertClick" locator1="Button#SAVE_AS_DRAFT" value1="Save as Draft" />
 
+		<execute function="AssertTextEquals#assertPartialText" locator1="Portlet#H3_HEADER" value1="Edit" />
+
 		<execute macro="Alert#viewSuccessMessage" />
 	</command>
 
@@ -758,15 +774,18 @@
 
 		<execute function="AssertTextEquals" locator1="Message#INFO_EXPLANATION_POST" value1="The following post will be added in place of the moved message." />
 
-		<execute function="Type" locator1="TextInput#SUBJECT" value1="${threadSplitReplySubject}" />
+		<execute function="Type" locator1="MessageBoardsSplitThread#ADD_EXPLANATION_SUBJECT_FIELD" value1="${threadSplitReplySubject}" />
 		<execute function="Type#typeEditor" locator1="AlloyEditor#CONTENT_FIELD" value1="${threadSplitReplyBody}" />
 
 		<execute function="AssertClick" locator1="Button#OK" value1="OK" />
 
 		<var name="key_threadBody" value="${threadReplyBody}" />
 
-		<execute function="AssertTextEquals" locator1="MessageBoardsThread#TITLE_HEADER" value1="${threadSplitReplySubject}" />
+		<execute function="AssertTextEquals" locator1="MessageBoardsThread#TITLE_HEADER" value1="${threadSplitSubject}" />
 		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_BODY" value1="${threadReplyBody}" />
+
+		<var name="key_threadBody" value="${threadSplitReplyBody}" />
+
 		<execute function="AssertElementNotPresent" locator1="MessageBoardsThread#THREAD_BODY_2" />
 	</command>
 
@@ -917,11 +936,15 @@
 	</command>
 
 	<command name="viewMarkAsQuestionCheckedCP">
+		<var name="key_threadSubject" value="${threadSubject}" />
+
 		<execute function="Click" locator1="Button#PLUS" />
 
 		<execute function="AssertClick" locator1="MenuItem#THREAD" value1="Thread" />
 
 		<execute function="AssertVisible" locator1="Button#PUBLISH" />
+
+		<execute function="Type#mouseOverFocusType" locator1="TextInput#SUBJECT" value1="${threadSubject}" />
 
 		<execute macro="Panel#expandPanel">
 			<var name="panelHeading" value="More Settings" />
@@ -933,11 +956,15 @@
 	</command>
 
 	<command name="viewMarkAsQuestionNotCheckedCP">
+		<var name="key_threadSubject" value="${threadSubject}" />
+
 		<execute function="Click" locator1="Button#PLUS" />
 
 		<execute function="AssertClick" locator1="MenuItem#THREAD" value1="Thread" />
 
 		<execute function="AssertVisible" locator1="Button#PUBLISH" />
+
+		<execute function="Type#mouseOverFocusType" locator1="TextInput#SUBJECT" value1="${threadSubject}" />
 
 		<execute macro="Panel#expandPanel">
 			<var name="panelHeading" value="More Settings" />
@@ -1165,9 +1192,9 @@
 		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_BODY" value1="${threadBody}" />
 
 		<var name="key_threadBody" value="${threadSplitReplyBody}" />
-		<var name="key_threadSubject" value="Thread Split" />
+		<var name="key_threadSubject" value="${threadSubject}" />
 
-		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_SUBJECT" value1="Thread Split" />
+		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_SUBJECT" value1="${threadSubject}" />
 		<execute function="AssertTextEquals#assertPartialText" locator1="MessageBoardsThread#THREAD_BODY" value1="${threadSplitReplyBody}" />
 
 		<execute macro="Navigator#gotoPage">
@@ -1176,15 +1203,19 @@
 
 		<var name="key_postsNumber" value="1" />
 		<var name="key_threadBody" value="${threadReplyBody}" />
+		<var name="key_threadSubject" value="${threadSplitSubject}" />
+
+		<execute function="AssertTextEquals" locator1="MessageBoards#THREAD_LIST_THREAD" value1="${threadSplitSubject}" />
+		<execute function="AssertTextEquals#assertPartialText" locator1="MessageBoards#THREAD_LIST_POSTS" value1="1" />
+		<execute function="AssertClick" locator1="MessageBoards#THREAD_LIST_THREAD" value1="${threadSplitSubject}" />
+
+		<execute function="AssertTextEquals" locator1="MessageBoardsThread#TITLE_HEADER" value1="${threadSplitSubject}" />
+		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_SUBJECT" value1="${threadSplitSubject}" />
+		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_BODY" value1="${threadReplyBody}" />
+
+		<var name="key_threadBody" value="${threadSplitReplyBody}" />
 		<var name="key_threadSubject" value="${threadSplitReplySubject}" />
 
-		<execute function="AssertTextEquals" locator1="MessageBoards#THREAD_LIST_THREAD" value1="${threadSplitReplySubject}" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="MessageBoards#THREAD_LIST_POSTS" value1="1" />
-		<execute function="AssertClick" locator1="MessageBoards#THREAD_LIST_THREAD" value1="${threadSplitReplySubject}" />
-
-		<execute function="AssertTextEquals" locator1="MessageBoardsThread#TITLE_HEADER" value1="${threadSplitReplySubject}" />
-		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_SUBJECT" value1="${threadSplitReplySubject}" />
-		<execute function="AssertTextEquals" locator1="MessageBoardsThread#THREAD_BODY" value1="${threadReplyBody}" />
 		<execute function="AssertElementNotPresent" locator1="MessageBoardsThread#THREAD_SUBJECT_2" />
 		<execute function="AssertElementNotPresent" locator1="MessageBoardsThread#THREAD_BODY_2" />
 	</command>
